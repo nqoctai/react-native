@@ -1,21 +1,34 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 export default function App() {
 
-  const [name, setName] = useState<string>("Dang Ngoc Tai");
-  const [age, setAge] = useState<number>(20);
+  const [name, setName] = useState<string>("");
 
-  const [person, setPerson] = useState<{ name: string, age: number }>({ name: "Dang Ngoc Tai", age: 20 });
 
   return (
     <View style={styles.container}>
       <View>
         {/* <Text style={styles.test}>{name}</Text>
         <Text style={styles.test}>{age}</Text> */}
-        <Text style={styles.test}>{person.name}</Text>
-        <Text style={styles.test}>{person.age}</Text>
+
+        <Text style={styles.test}>{name}</Text>
+
+        <TextInput
+          value={name}
+          onChangeText={setName}
+          autoCapitalize='none'
+          autoCorrect={false}
+          // keyboardType='numeric'
+          multiline
+          style={{
+            borderColor: 'black',
+            borderWidth: 1,
+            padding: 10,
+          }} />
+
+
 
       </View>
       <Text>Hello World!</Text>
