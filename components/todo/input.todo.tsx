@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, Button, StyleSheet, TextInput, View } from 'react-native';
 
 
 const styles = StyleSheet.create({
@@ -12,9 +12,25 @@ const styles = StyleSheet.create({
     }
 })
 
-const InputTodo = () => {
+interface IProps {
+    addTodo: (v: string) => void;
+}
 
+const InputTodo = (props: IProps) => {
+    const { addTodo } = props;
     const [name, setName] = useState<string>("");
+
+    const handleAddNewTodo = () => {
+        if (!name) {
+            Alert.alert("Thông tin không hợp lệ", "Tiêu đề không được để trống", [
+                { text: "OK", onPress: () => console.log("OK Pressed") },
+                { text: "Cancel", onPress: () => console.log("Cancel Pressed") }
+            ])
+            return;
+        }
+        addTodo(name);
+        setName("");
+    }
     return (
         <>
             <View>
@@ -27,9 +43,7 @@ const InputTodo = () => {
                     multiline
                     style={styles.todoInput} />
 
-                <Button title="ADD NEW" onPress={() => {
-                    alert("Hello World!");
-                }} />
+                <Button title="ADD NEW" onPress={handleAddNewTodo} />
             </View>
         </>
     )

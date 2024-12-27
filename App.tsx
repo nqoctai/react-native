@@ -1,34 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import InputTodo from './components/todo/input.todo';
 import ListTodo from './components/todo/list.todo';
 
 export default function App() {
 
 
-  const [todoList, setTodoList] = useState<ITodo[]>([
-    { id: 1, name: "Task 1" },
-    { id: 2, name: "Task 2" },
-    { id: 3, name: "Task 3" },
-    { id: 4, name: "Task 4" },
-    { id: 5, name: "Task 5" },
-    { id: 6, name: "Task 6" },
-    { id: 7, name: "Task 7" },
-    { id: 8, name: "Task 8" },
-    { id: 9, name: "Task 9" },
-    { id: 10, name: "Task 10" },
-  ]);
+  const [todoList, setTodoList] = useState<ITodo[]>([]);
+
+  function randomInteger(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  const addTodo = (v: string) => {
+    const todo = { id: randomInteger(1, 1000000), name: v };
+    setTodoList([...todoList, todo]);
+  }
+
+  const deleteTodo = (id: number) => {
+    const newTodoList = todoList.filter((todo) => todo.id !== id);
+    setTodoList(newTodoList);
+  }
 
 
   return (
-    <View style={styles.container}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+      <View style={styles.container}>
 
-      <InputTodo />
-      <ListTodo todoList={todoList} />
+        <InputTodo addTodo={addTodo} />
+        <ListTodo todoList={todoList} deleteTodo={deleteTodo} />
 
 
-    </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -39,7 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     // alignItems: 'center',
     // justifyContent: 'center',
-    fontSize: 60,
+    fontSize: 60, color: 'red',
     paddingTop: 10,
     paddingHorizontal: 20,
     marginTop: 50,
