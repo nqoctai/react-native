@@ -8,76 +8,53 @@ import FlexBox from './components/todo/flexbox';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Home from './components/learn/home';
+import HomeDetail from './components/learn/home.detail';
+import Like from './components/learn/like';
+import LikeDetail from './components/learn/like.detail';
+import About from './components/learn/about';
+import ChangePassword from './components/learn/change.password';
 
 export default function App() {
 
   const Stack = createNativeStackNavigator();
   const Drawer = createDrawerNavigator();
+  const Tab = createBottomTabNavigator();
 
-
-
-  function HomeScreen(props: any) {
-    const navigation = props.navigation;
+  const TabApp = () => {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
-        <View style={{ marginVertical: 10 }}>
-          <Button title='Go to Detail' onPress={() => navigation.navigate("Details")} />
-        </View>
-        <View style={{ marginVertical: 10 }}>
-          <Button title='Go user = 1' onPress={() => navigation.navigate("Details", { userId: 1, name: "Ngoc Tai" })} />
-        </View>
-        <View style={{ marginVertical: 10 }}>
-          <Button title='Go user = 2' onPress={() => navigation.navigate("Details", { userId: 2, name: "SharonM" })} />
-        </View>
-
-      </View>
-    );
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Like" component={Like} />
+      </Tab.Navigator>
+    )
   }
 
-  function DetailsScreen(props: any) {
-    const route: any = useRoute();
-    const navigation: any = useNavigation();
+  const StackApp = () => {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-        <Text>User Id = {route?.params?.userId}</Text>
-        <Button title='Go to Home' onPress={() => navigation.goBack()} />
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={TabApp} options={{ headerTitle: "Trang chủ", headerShown: false }} />
+        <Stack.Screen name="Details" component={HomeDetail} options={({ route }: { route: any }) => ({
+          headerTitle: `Xem chi tiết ${route?.params?.userId ?? ""}`
+        })} />
+        <Stack.Screen name="LikeDetails" component={LikeDetail} />
 
-      </View>
-    );
+      </Stack.Navigator>
+    )
   }
-
   return (
 
     <NavigationContainer>
-      {/* <Stack.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#f4511e',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerTitle: "Trang chủ" }} />
-        <Stack.Screen name="Details" component={DetailsScreen} options={({ route }: { route: any }) => ({
-          headerTitle: `Xem chi tiết ${route?.params?.userId ?? ""}`,
-          headerStyle: {
-            backgroundColor: '#f4511e',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        })} />
-      </Stack.Navigator> */}
+
       <Drawer.Navigator>
-        <Drawer.Screen name="Feed" component={HomeScreen} options={{ drawerLabel: "Trang chủ" }} />
-        <Drawer.Screen name="Article" component={DetailsScreen} />
+        <Drawer.Screen name="StackApp" component={StackApp} />
+
+        <Drawer.Screen name="About" component={About} />
+        <Drawer.Screen name="ChangePassword" component={ChangePassword} />
       </Drawer.Navigator>
+
     </NavigationContainer>
   );
 }
