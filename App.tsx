@@ -6,10 +6,14 @@ import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/
 import ListTodo from './components/todo/list.todo';
 import FlexBox from './components/todo/flexbox';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import 'react-native-gesture-handler';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 export default function App() {
 
   const Stack = createNativeStackNavigator();
+  const Drawer = createDrawerNavigator();
+
 
 
   function HomeScreen(props: any) {
@@ -37,7 +41,7 @@ export default function App() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Details Screen</Text>
-        <Text>User Id = {route.params.userId}</Text>
+        <Text>User Id = {route?.params?.userId}</Text>
         <Button title='Go to Home' onPress={() => navigation.goBack()} />
 
       </View>
@@ -47,10 +51,33 @@ export default function App() {
   return (
 
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
+      {/* <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#f4511e',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerTitle: "Trang chủ" }} />
+        <Stack.Screen name="Details" component={DetailsScreen} options={({ route }: { route: any }) => ({
+          headerTitle: `Xem chi tiết ${route?.params?.userId ?? ""}`,
+          headerStyle: {
+            backgroundColor: '#f4511e',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        })} />
+      </Stack.Navigator> */}
+      <Drawer.Navigator>
+        <Drawer.Screen name="Feed" component={HomeScreen} options={{ drawerLabel: "Trang chủ" }} />
+        <Drawer.Screen name="Article" component={DetailsScreen} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }
